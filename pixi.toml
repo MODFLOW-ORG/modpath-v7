@@ -1,0 +1,24 @@
+[workspace]
+name = "modpath-v7"
+channels = ["conda-forge"]
+platforms = ["win-64", "linux-64", "linux-aarch64", "osx-arm64", "osx-64"]
+version = "7.2.002"
+
+[dependencies]
+filelock = "*"
+meson = ">=1.3.1"
+ninja = "*"
+modflow-devtools = "*"
+
+[tasks]
+
+# meson build for modpath-v7
+clean = { cmd = "rm -rf builddir" }
+setup = { cmd = "meson setup --prefix=$(pwd) --bindir=bin builddir", env = { PKG_CONFIG_PATH = "$CONDA_PREFIX/lib/pkgconfig" } }
+build = "meson install -C builddir"
+
+# test modpath-v7
+test = { cmd = "meson test --verbose --no-rebuild -C builddir" }
+
+# get ostag for system
+get-ostag = { cmd = "python -c 'from modflow_devtools.ostags import get_ostag; print(get_ostag())'"}

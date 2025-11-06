@@ -37,3 +37,11 @@
 *.pdb
 msvs/bin
 work
+
+# Meson build artifacts
+builddir/
+bin/
+
+# Pixi artifacts
+.pixi/
+pixi.lock

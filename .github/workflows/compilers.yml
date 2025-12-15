@@ -25,18 +25,18 @@ jobs:
       matrix:
         include:
           # test latest gcc
-          - {os: ubuntu-latest, compiler: gcc, version: 13, shell: bash, release: no}
-          - {os: macos-14, compiler: gcc, version: 13, shell: bash, release: yes}
-          - {os: windows-latest, compiler: gcc, version: 13, shell: pwsh, release: no}
+          - {os: ubuntu-latest, compiler: gcc, version: 13, shell: bash, release: no, xcode: none}
+          - {os: macos-14, compiler: gcc, version: 13, shell: bash, release: yes, xcode: 14.3.1}
+          - {os: windows-latest, compiler: gcc, version: 13, shell: pwsh, release: no, xcode: none}
           # test intel-classic
-          - {os: ubuntu-22.04, compiler: intel-classic, version: 2021.7, shell: bash, release: no}
-          - {os: macos-13, compiler: intel-classic, version: 2021.6, shell: bash, release: yes}
+          - {os: ubuntu-22.04, compiler: intel-classic, version: 2021.7, shell: bash, release: no, xcode: none}
+          - {os: macos-15-intel, compiler: intel-classic, version: 2021.6, shell: bash, release: yes, xcode: 16.4}
           # test previous gcc
-          - {os: ubuntu-latest, compiler: gcc, version: 12, shell: bash, release: no}
-          - {os: ubuntu-latest, compiler: gcc, version: 11, shell: bash, release: no}
+          - {os: ubuntu-latest, compiler: gcc, version: 12, shell: bash, release: no, xcode: none}
+          - {os: ubuntu-latest, compiler: gcc, version: 11, shell: bash, release: no, xcode: none}
           # test ifx
-          - {os: ubuntu-22.04, compiler: intel, version: "2025.0", shell: bash, release: yes}
-          - {os: windows-2022, compiler: intel, version: "2025.0", shell: pwsh, release: yes}
+          - {os: ubuntu-22.04, compiler: intel, version: "2025.0", shell: bash, release: yes, xcode: none}
+          - {os: windows-2022, compiler: intel, version: "2025.0", shell: pwsh, release: yes, xcode: none}
     defaults:
       run:
         shell: ${{ matrix.shell }}
@@ -49,7 +49,7 @@ jobs:
       - uses: maxim-lobanov/setup-xcode@v1
         if: ${{ (runner.os == 'macOS') && (matrix.compiler == 'intel-classic') }}
         with:
-          xcode-version: "14.3.1"
+          xcode-version: ${{ matrix.xcode }}
 
       - name: Setup ${{ matrix.compiler }} ${{ matrix.version }} on ${{ matrix.os }}
         uses: fortran-lang/setup-fortran@v1
